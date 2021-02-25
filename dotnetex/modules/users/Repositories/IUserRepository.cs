@@ -7,8 +7,9 @@ namespace modules.users.Repositories
     {
         List<Users> findAll();
         Users findById(int id);
+        Users findByIdTracked(int id);
         Users create(Users newUser);
         Users update();
-        void delete();
+        void delete(Users user);
     }
 }

@@ -18,25 +18,27 @@ namespace modules.users.Models
         public Users() { }
 
         [Column("user_id")]
-        public int Id { get; private set; }
+        [Required]
+        public int Id { get; set; }
 
         [Column("user_name")]
-        [Required]
         [MaxLength(100)]
-        public string name { get; private set; }
+        [Required]
+        public string name { get; set; }
 
         [Column("user_email")]
-        [Required]
         [MaxLength(100)]
-        public string email { get; private set; }
+        [Required]
+        public string email { get; set; }
 
         [Column("user_password")]
-        [Required]
         [MaxLength(30)]
-        public string password { get; private set; }
+        [Required]
+        public string password { get; set; }
 
         [Column("user_birthday")]
-        public DateTime birthday { get; private set; }
+        [Required]
+        public DateTime birthday { get; set; }
 
 
     }

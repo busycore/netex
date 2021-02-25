@@ -20,13 +20,7 @@ namespace dotnetex
 
 
             Host.CreateDefaultBuilder(args)
-
-                    .ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.AddConsole();
-                })
-                .ConfigureWebHostDefaults(webBuilder =>
+            .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
                 });

@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using modules.users.Repositories;
+using modules.users.Services;
 using shared.Configurations.Database;
 
 namespace dotnetex
@@ -36,12 +37,20 @@ namespace dotnetex
             services.AddDbContext<SQLiteDbContext>(options => options.UseSqlite(connection));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<UserServices, UserServices>();
 
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "dotnetex", Version = "v1" });
+            });
+
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+                loggingBuilder.AddConsole();
+                loggingBuilder.AddDebug();
             });
         }
 

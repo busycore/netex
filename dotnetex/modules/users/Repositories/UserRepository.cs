@@ -19,8 +19,6 @@ namespace modules.users.Repositories
         {
             _context = context;
         }
-
-
         public List<Users> findAll()
         {
             return _context.Users.AsNoTracking().ToList();
@@ -28,17 +26,21 @@ namespace modules.users.Repositories
 
         public Users findById(int id)
         {
-            var foundUser = _context.Users.AsNoTracking().FirstOrDefault(x => x.Id == id);
-            if (foundUser == null)
-            {
-                throw new BadHttpRequestException("No user found", (int)HttpStatusCode.Conflict);
+            return _context.Users.AsNoTracking().FirstOrDefault(x => x.Id == id);
+        }
 
-            }
-            return foundUser;
+        public Users findByIdTracked(int id)
+        {
+            return _context.Users.FirstOrDefault(x => x.Id == id);
+            // if (foundUser == null)
+            // {
+            //     throw new BadHttpRequestException("No user found", (int)HttpStatusCode.Conflict);
+
+            // }
+            // return foundUser;
         }
         public Users create(Users newUser)
         {
-            //var newUser = new Users("")
             var usr = _context.Add(newUser).Entity;
             _context.SaveChanges();
             return usr;
@@ -47,9 +49,10 @@ namespace modules.users.Repositories
         {
             return new Users();
         }
-        public void delete()
+        public void delete(Users user)
         {
-
+            _context.Remove(user);
+            _context.SaveChanges();
         }
 
     }
