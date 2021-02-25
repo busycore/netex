@@ -2,6 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using dotnetex.modules.users.Services.Implementations.CreateUserService;
+using dotnetex.modules.users.Services.Implementations.GetAllUsersService;
+using dotnetex.modules.users.Services.Implementations.GetUserByIdService;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +41,9 @@ namespace dotnetex
 
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<UserServices, UserServices>();
+            services.AddTransient<IGetAllUsersService, GetAllUsersService>();
+            services.AddTransient<IGetUserByIdService, GetUserByIdService>();
+            services.AddTransient<ICreateUserService, CreateUserService>();
 
 
             services.AddControllers();

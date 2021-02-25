@@ -1,13 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using modules.users.Models;
-using modules.users.Repositories;
 using modules.users.Services;
 using shared.Configurations.Database;
 
@@ -18,14 +14,12 @@ namespace modules.users.Controllers
     //[Route("[controller]")]
     public class UsersControllers : ControllerBase
     {
-        private readonly SQLiteDbContext _context;
         private readonly UserServices userServices;
 
         private readonly ILogger<UsersControllers> _logger;
 
         public UsersControllers(SQLiteDbContext context, UserServices userServices, ILogger<UsersControllers> logger)
         {
-            this._context = context;
             this._logger = logger;
             this.userServices = userServices;
         }
