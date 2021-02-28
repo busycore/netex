@@ -2,8 +2,9 @@ namespace dotnetex.shared.Errors
 {
     public class APIError
     {
-        private int status_code = 500;
-        private string message = "";
+        public System.DateTime timestamp { get; set; } = System.DateTime.Now;
+        public int status_code { get; set; } = 500;
+        public string message { get; set; } = "";
 
         public APIError()
         {

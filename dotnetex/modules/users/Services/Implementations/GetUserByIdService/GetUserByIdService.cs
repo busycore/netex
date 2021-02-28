@@ -20,7 +20,7 @@ namespace dotnetex.modules.users.Services.Implementations.GetUserByIdService
             var foundUser = this.userRepository.findById(id);
             if (foundUser == null)
             {
-                throw new HttpException(HttpStatusCode.Conflict, "User not found");
+                throw new HttpException(HttpStatusCode.NotFound, "User not found");
             }
             return foundUser;
         }

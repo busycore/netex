@@ -1,6 +1,7 @@
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace dotnetex.shared.Errors.Controller
 {
@@ -18,7 +19,11 @@ namespace dotnetex.shared.Errors.Controller
             //     "HttpException" => HttpStatusCode.BadRequest,
             //     _ => HttpStatusCode.InternalServerError,
             // };
-            return Problem(detail: error.Message, statusCode: statusCode);
+            //return Problem(detail: error.Message, statusCode: statusCode);
+            APIError errorObject = new APIError(statusCode, error.Message);
+            var x = new JsonResult(errorObject);
+            x.StatusCode = statusCode;
+            return x;
         }
     }
 }
