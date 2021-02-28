@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace modules.users.Models
 {
@@ -19,16 +20,20 @@ namespace modules.users.Models
 
         [Column("user_id")]
         [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Column("user_name")]
         [MaxLength(100)]
         [Required]
+
         public string name { get; set; }
 
-        [Column("user_email")]
+        [Column("user_email", TypeName = "varchar", Order = 2)]
         [MaxLength(100)]
         [Required]
+
         public string email { get; set; }
 
         [Column("user_password")]

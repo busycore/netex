@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+using dotnetex.modules.users.Services.Implementations.GetAllUsersService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using modules.users.Models;
@@ -11,7 +12,8 @@ namespace modules.users.Controllers
 {
     [ApiController]
     [Route("/user")]
-    //[Route("[controller]")]
+    //[Route("[controller]")] -> Will use the class name as route
+    //[Route("[controller]/[action]")] -> will use classname/methodname as path
     public class UsersControllers : ControllerBase
     {
         private readonly UserServices userServices;
@@ -30,6 +32,20 @@ namespace modules.users.Controllers
             return this.userServices.GetAllUsers();
         }
 
+        [HttpOptions("second")]
+        public List<Users> getAllUsersAlternative([FromServices] IServiceProvider serviceProvider)
+        {
+            //Injecting/Resolving on the fly
+            var service = (IGetAllUsersService)serviceProvider.GetService(typeof(IGetAllUsersService));
+            return service.execute();
+        }
+
+        [HttpOptions("third")]
+        public List<Users> getAllUsersThird([FromServices] IGetAllUsersService GetAllUsersService)
+        {
+            return GetAllUsersService.execute();
+        }
+
 
         [HttpGet("{id}")]
         public Users getSingleUser(int id)
@@ -42,7 +58,6 @@ namespace modules.users.Controllers
         {
             this.userServices.DeleteUser();
             return StatusCode((int)HttpStatusCode.NoContent);
-
         }
 
         [HttpPost]
