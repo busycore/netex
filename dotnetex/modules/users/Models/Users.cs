@@ -27,7 +27,7 @@ namespace modules.users.Models
 
         [Column("user_name")]
         [MaxLength(100)]
-        [Required]
+        [Required(ErrorMessage = "The name is important")]
 
         public string name { get; set; }
 
@@ -44,7 +44,8 @@ namespace modules.users.Models
 
         [Column("user_birthday")]
         [Required]
-        [IsAdult(ErrorMessage ="You are not old enough")]
+        [IsAdult(ErrorMessage = "You are not old enough")]
+        //[IsAdult]
         public DateTime birthday { get; set; }
 
 

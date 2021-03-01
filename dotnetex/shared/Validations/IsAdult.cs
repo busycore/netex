@@ -8,20 +8,21 @@ namespace dotnetex.shared.Validations
 {
     public class IsAdult : ValidationAttribute
     {
-
+        private string error_message { get; set; } = "Should be older than 18";
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-
-             DateTime date = (DateTime)value;
-             if (DateTime.Now.Year - date.Year >= 18)
-             {
-                 return ValidationResult.Success;
-             }
-            
+            if (ErrorMessage != null)
+            {
+                error_message = ErrorMessageString;
+            }
+            DateTime date = (DateTime)value;
+            if (DateTime.Now.Year - date.Year >= 18)
+            {
+                return ValidationResult.Success;
+            }
             else
             {
-               return new ValidationResult("Not a number.");
-
+                return new ValidationResult(error_message);
             }
 
         }
