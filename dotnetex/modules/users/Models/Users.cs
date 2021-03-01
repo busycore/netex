@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using dotnetex.shared.Validations;
 using Microsoft.EntityFrameworkCore;
 
 namespace modules.users.Models
@@ -43,6 +44,7 @@ namespace modules.users.Models
 
         [Column("user_birthday")]
         [Required]
+        [IsAdult(ErrorMessage ="You are not old enough")]
         public DateTime birthday { get; set; }
 
 

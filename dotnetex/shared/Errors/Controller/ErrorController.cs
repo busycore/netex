@@ -21,8 +21,7 @@ namespace dotnetex.shared.Errors.Controller
             // };
             //return Problem(detail: error.Message, statusCode: statusCode);
             APIError errorObject = new APIError(statusCode, error.Message);
-            var x = new JsonResult(errorObject);
-            x.StatusCode = statusCode;
+            var x = new JsonResult(errorObject){StatusCode = statusCode};
             return x;
         }
     }
