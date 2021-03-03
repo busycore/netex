@@ -15,6 +15,7 @@ namespace dotnetex.shared.Validations
             {
                 error_message = ErrorMessageString;
             }
+
             DateTime date = (DateTime)value;
             if (DateTime.Now.Year - date.Year >= 18)
             {

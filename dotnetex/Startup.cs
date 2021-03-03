@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotnetex.modules.users.Services.Implementations.CreateUserService;
+using dotnetex.modules.users.Services.Implementations.DeleteUserService;
 using dotnetex.modules.users.Services.Implementations.GetAllUsersService;
+using dotnetex.modules.users.Services.Implementations.GetUserByEmailService;
 using dotnetex.modules.users.Services.Implementations.GetUserByIdService;
 using dotnetex.shared.Errors;
+using dotnetex.shared.Providers.FileUploadProvider;
+using dotnetex.shared.Providers.FileUploadProvider.Implementations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +51,9 @@ namespace dotnetex
             services.AddTransient<IGetAllUsersService, GetAllUsersService>();
             services.AddTransient<IGetUserByIdService, GetUserByIdService>();
             services.AddTransient<ICreateUserService, CreateUserService>();
+            services.AddTransient<IGetUserByEmailService, GetUserByEmailService>();
+            services.AddTransient<IDeleteUserService, DeleteUserService>();
+            services.AddTransient<IFileUpload, LocalFileUploadProvider>();
 
 
             services.AddControllers();
@@ -66,6 +73,8 @@ namespace dotnetex
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            //Only For .NET 5
             // app.UseExceptionHandler(a => a.Run(async context =>
             // {
             //     var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>();
@@ -82,14 +91,15 @@ namespace dotnetex
             //     //await context.Response.WriteAsJsonAsync(new APIError(100, exception.Message));
             // }));
             // It should be one of your very first registrations
+
             app.UseExceptionHandler("/error"); // Add this
 
-            // if (env.IsDevelopment())
-            // {
-            //     //app.UseDeveloperExceptionPage();
-            //     app.UseSwagger();
-            //     app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "dotnetex v1"));
-            // }
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "dotnetex v1"));
+            }
 
             //app.UseHttpsRedirection();
 

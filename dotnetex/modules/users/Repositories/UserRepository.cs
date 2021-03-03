@@ -55,5 +55,9 @@ namespace modules.users.Repositories
             _context.SaveChanges();
         }
 
+        public Users findByEmail(string email)
+        {
+            return _context.Users.AsNoTracking().FirstOrDefault(usr => usr.email == email);
+        }
     }
 }

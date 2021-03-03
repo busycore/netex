@@ -7,6 +7,7 @@ namespace modules.users.Repositories
     {
         List<Users> findAll();
         Users findById(int id);
+        Users findByEmail(string email);
         Users findByIdTracked(int id);
         Users create(Users newUser);
         Users update();
