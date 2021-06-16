@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using dotnetex.modules.users.Services.Implementations.GetAllUsersService;
@@ -85,52 +86,62 @@ namespace modules.users.Controllers
         }
 
         [HttpPost("uploadS3")]
-        public async Task<string> uploadFileS3([FromForm] IFormFile arquivo)
+        public async Task<List<string>> uploadFileS3([FromForm] IFormFile arquivo)
         {
             //*Setup S3 Client
-            var newRegion = RegionEndpoint.GetBySystemName("us-west-new");
+            //var newRegion = RegionEndpoint.GetBySystemName("us-west-new");
+
+
+            string profile_name = "localstack";
+            var credentials = new StoredProfileAWSCredentials(profile_name);
+
+            _logger.LogInformation(credentials.GetCredentials().AccessKey);
+            _logger.LogInformation(credentials.GetCredentials().SecretKey);
 
             var config = new AmazonS3Config { ServiceURL = "http://localhost:4566" };
-            var s3 = new AmazonS3Client(config);
+            var s3 = new AmazonS3Client(credentials, config);
 
             // //*List Buckets
 
-            // var response = await s3.ListBucketsAsync();
+            var response = await s3.ListBucketsAsync();
 
-            // var ListOfBuckets = response.Buckets.Select(bck => bck.BucketName + " - " + bck.CreationDate).ToList();
-            // foreach (S3Bucket bucket in response.Buckets)
-            // {
-            //     _logger.LogInformation(bucket.BucketName);
+            var ListOfBuckets = response.Buckets.Select(bck => bck.BucketName + " - " + bck.CreationDate).ToList();
+            foreach (S3Bucket bucket in response.Buckets)
+            {
+                _logger.LogInformation(bucket.BucketName);
 
-            // }
+            }
+
+            var teste = await s3.ListObjectsV2Async(new ListObjectsV2Request() { BucketName = "fileplace" });
+            var ListOfObjects = teste.S3Objects.Select(obj => obj.Key).ToList();
 
             //await s3.PutBucketAsync("Olop");
-            try
-            {
+            // try
+            // {
 
 
-                var putRequest1 = new PutObjectRequest
-                {
-                    BucketName = "fileplace",
-                    Key = "asd",
-                    ContentBody = "sample text"
-                };
+            //     var putRequest1 = new PutObjectRequest
+            //     {
+            //         BucketName = "fileplace",
+            //         Key = "asd",
+            //         ContentBody = "sample text"
+            //     };
 
-                PutObjectResponse response1 = await s3.PutObjectAsync(putRequest1);
-                _logger.LogInformation(response1.ToString());
-            }
-            catch (AmazonS3Exception e)
-            {
-                Console.WriteLine(
-                        "AWS - Error encountered ***. Message:'{0}' when writing an object"
-                        , e.Message);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(
-                    "Unknown encountered on server. Message:'{0}' when writing an object"
-                    , e.Message);
-            }
+            //     PutObjectResponse response1 = await s3.PutObjectAsync(putRequest1);
+            //     _logger.LogInformation(response1.ToString());
+            // }
+            // catch (AmazonS3Exception e)
+            // {
+            //     Console.WriteLine(
+            //             "AWS - Error encountered ***. Message:'{0}' when writing an object"
+            //             , e.Message);
+            // }
+            // catch (Exception e)
+            // {
+            //     Console.WriteLine(
+            //         "Unknown encountered on server. Message:'{0}' when writing an object"
+            //         , e.Message);
+            // }
 
 
             // //* File Upload
@@ -154,7 +165,7 @@ namespace modules.users.Controllers
 
             //_logger.LogInformation(Laresult);
 
-            return "ListOfBuckets";
+            return ListOfBuckets;
             //return await fileUpload.Upload(arquivo);
             //return this.userServices.createUser(user);
         }
